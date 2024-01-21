@@ -1,6 +1,6 @@
 import sys, os
 sys.path.append(os.getcwd())
-from src import tax_codes, income_tax_info
+from src import income_tax_info
 class IncomeTax:
 
     def __init__(self, current_salary: int, tax_code: str) -> None:
@@ -24,12 +24,13 @@ class IncomeTax:
         try:
             financial_year_data = self.GetAdditionalParameters()[financial_year]
         except KeyError:
-            return "Year not included in calculator, wrong fromat provided, or incorrect key provided for data. \nCorrect format: '2018-19'"
+            return "Year not included in calculator, wrong format provided, or incorrect key provided for data. Please call GetAdditionalParameters to find available timeframes and format"
         
         try:
             if self.salary < 0:
                 return "Please provide a positive salary"
-            thresholds, rates = financial_year_data["thresholds"], financial_year_data["rates"]
+            thresholds, rates = financial_year_data["thresholds"][:], financial_year_data["rates"][:]
+            print(thresholds)
             # TODO: Include tax codes, for now assumed to be the standard allowance for each year
             if self.salary > financial_year_data["personal_allowance threshold"] and self.salary < financial_year_data["personal_allowance threshold"] + thresholds[1] * 2:
                 deduction_from_allowance = (self.salary - financial_year_data["personal_allowance threshold"]) // 2
@@ -39,7 +40,8 @@ class IncomeTax:
                 for idx in range(1, len(thresholds)-1):
                     thresholds[idx] -= financial_year_data["personal_allowance"]
                 thresholds, rates = thresholds[1:], rates[1:]
-
+            print(financial_year_data["thresholds"])
+            print(self.GetAdditionalParameters()[financial_year]["thresholds"])
             breakdown: dict = {rate: 0 for rate in rates}
             total_tax: int = 0
             idx: int = 1
@@ -65,5 +67,5 @@ class IncomeTax:
                 "Daily breakdown":{"gross income": format(self.salary/260, ".2f"), "breakdown": {key: format(value/260, ".2f") for key, value in breakdown.items()}, "total income tax": format(total_tax/260, ".2f")}}
         except TypeError:
             return "Please provide a valid salary, in integers"
-# a = IncomeTax(200000, "600L")
+# a = IncomeTax(102000, "1257L")
 # print(a.Calculate("2022-23"))

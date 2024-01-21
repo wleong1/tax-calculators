@@ -33,7 +33,11 @@ class Core:
             data = self.tools[tool_name].GetAdditionalParameters()
             return data[financial_year]
         except KeyError:
-            return "Please provide the correct tool name"
+            return """
+            Incorrect tool name, year not included in calculator or, wrong format provided.
+            Call GetTools() to get available tools.
+            Correct format for financial_year: "2022-23"   
+            """
         # except TypeError:
         #     return "Please check if the number of arguments provided are correct. \n Arguments for this method: 2"
     
@@ -45,11 +49,11 @@ class Core:
         # except TypeError:
         #     return "Please check if the number of arguments provided are correct. \n Arguments for this method: 2"
     
-    def EagerLoad(self) -> None:
-        pass
+    # def EagerLoad(self) -> None:
+    #     pass
 
-    def LazyLoad(self, calculator: __module__) -> None:
-        pass
+    # def LazyLoad(self, calculator: __module__) -> None:
+    #     pass
         # curr_dir = os.path.dirname(os.path.realpath(__file__))
         # print(curr_dir)
         # try:
@@ -69,7 +73,7 @@ class Core:
         #     print("No such calculator")
 
 a = Core(20000, "1257L")
-print(a.GetTools())
-print(a.GetCalculationParameters("national_insurance"))
-print(a.GetAdditionalParameters("national_insurance", "2023-24"))
-print(a.Calculate("national_insurance", "2022-23"))
+# print(a.GetTools())
+# print(a.GetCalculationParameters("national_insurance"))
+# print(a.GetAdditionalParameters("national_insurane", "2023-245"))
+print(a.Calculate("national_insurance", "2022-232"))

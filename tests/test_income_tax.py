@@ -87,7 +87,7 @@ def test_Calculate_wrong_argument_format():
     test_income_tax = income_tax.IncomeTax(current_salary=29000, tax_code="1257L")
     dummy_financial_year = "2022/23"
     results = test_income_tax.Calculate(financial_year=dummy_financial_year)
-    assert results == "Year not included in calculator, wrong fromat provided, or incorrect key provided for data. \nCorrect format: '2018-19'"
+    assert results == "Year not included in calculator, wrong format provided, or incorrect key provided for data. Please call GetAdditionalParameters to find available timeframes and format"
     
 def test_Calculate_salary_error():
     dummy_salary = "90"

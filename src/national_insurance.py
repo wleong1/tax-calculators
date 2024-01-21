@@ -24,7 +24,7 @@ class NationalInsurance:
         try:
             financial_year_data = self.GetAdditionalParameters()[financial_year]
         except KeyError:
-            return "Year not included in calculator, wrong fromat provided, or incorrect key provided for data. Please call GetAdditionalParameters to find available timeframes and format"
+            return "Year not included in calculator, wrong format provided, or incorrect key provided for data. Please call GetAdditionalParameters to find available timeframes and format"
         
         try:
             if self.salary < 0:
@@ -83,6 +83,6 @@ class NationalInsurance:
                     "Daily breakdown":{"gross income": format(self.salary/260, ".2f"), "breakdown": {key: format(value/260, ".2f") for key, value in breakdown.items()}, "total NI": format(total_tax/260, ".2f")}}
         except TypeError:
             return "Please provide a valid salary, in integers"
-a = NationalInsurance(5000)
-print(a.Calculate("2018-19"))
+# a = NationalInsurance(200000)
+# print(a.Calculate("2022-23"))
 # print(a.GetAdditionalParameters())

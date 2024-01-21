@@ -83,7 +83,20 @@ def test_Calculate_constant_year_over_second_threshold():
     assert float(calculated_partial_results["total NI"]) <= actual_total_tax + 10
     assert float(calculated_partial_results["total NI"]) >= actual_total_tax - 10
 
-def test_Calculate_variable_year():
+# Requires changing after presentation of data has been finalised
+def test_Calculate_variable_year_under_first_threshold():
+    test_national_insurance = national_insurance.NationalInsurance(5000)
+    financial_year = "2022-23"
+    calculated_partial_results = {'gross income': '5000.00', 'breakdown': {0: 0, 0.12: 0, 0.02: 0}, 'total NI': '0.00'}
+    results = test_national_insurance.Calculate(financial_year=financial_year)
+    actual_total_tax = 0.00
+    assert type(results) == dict
+    # assert results["Annual breakdown"]["gross income"] == calculated_partial_results["gross income"]
+    # assert results["Annual breakdown"]["breakdown"] == calculated_partial_results["breakdown"]
+    assert float(calculated_partial_results["total NI"]) <= actual_total_tax + 10
+    assert float(calculated_partial_results["total NI"]) >= actual_total_tax - 10
+
+def test_Calculate_variable_year_over_first_threshold():
     # change when a better presentation of values have been decided
     test_national_insurance = national_insurance.NationalInsurance(29000)
     financial_year = "2022-23"
@@ -95,6 +108,25 @@ def test_Calculate_variable_year():
     # assert results["Annual breakdown"]["breakdown"] == calculated_partial_results["breakdown"]
     assert float(calculated_partial_results["total NI"]) <= actual_total_tax + 10
     assert float(calculated_partial_results["total NI"]) >= actual_total_tax - 10
+
+# Requires changing after presentation of data has been finalised
+def test_Calculate_variable_year_over_second_threshold():
+    test_national_insurance = national_insurance.NationalInsurance(200000)
+    financial_year = "2022-23"
+    calculated_partial_results = {'gross income': '200000.00', 'breakdown': {0: 0, 0.12: 0, 0.02: 0}, 'total NI': '8973.75'}
+    results = test_national_insurance.Calculate(financial_year=financial_year)
+    actual_total_tax = 8974.39
+    assert type(results) == dict
+    # assert results["Annual breakdown"]["gross income"] == calculated_partial_results["gross income"]
+    # assert results["Annual breakdown"]["breakdown"] == calculated_partial_results["breakdown"]
+    assert float(calculated_partial_results["total NI"]) <= actual_total_tax + 10
+    assert float(calculated_partial_results["total NI"]) >= actual_total_tax - 10
+
+def test_Calculate_key_error():
+    dummy_year = "2016-2017"
+    test_national_insurance = national_insurance.NationalInsurance(current_salary=32400)
+    results = test_national_insurance.Calculate(financial_year=dummy_year)
+    assert results == "Year not included in calculator, wrong format provided, or incorrect key provided for data. Please call GetAdditionalParameters to find available timeframes and format"
 
 def test_Calculate_salary_error():
     dummy_salary = "90"
