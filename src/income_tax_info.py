@@ -1,4 +1,4 @@
-information = {
+information: dict = {
     "2015-16": {
         "personal_allowance": 10600,
         "personal_allowance threshold": 100000,
@@ -52,5 +52,5 @@ information = {
         "personal_allowance threshold": 100000,
         "thresholds": [0, 12570, 50270, 125140],
         "rates": [0, 0.2, 0.4, 0.45]
-    }    
+    }
 }

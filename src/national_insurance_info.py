@@ -1,4 +1,4 @@
-information = {
+information: dict = {
     "2015-16": {
         "thresholds_annual": [0, 8060, 42380],
         "thresholds_month": [0, 671, 3530],
