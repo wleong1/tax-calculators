@@ -1,28 +1,80 @@
 from typing import Union
 import os
 import sys
-from src import national_insurance_info
 sys.path.append(os.getcwd())
+from src import national_insurance_info
+
 
 class NationalInsurance:
+    """
+    National Insurance calculator for a given salary and financial year.
+    """
 
     def __init__(self, current_salary: int) -> None:
+        """
+        Constructs all the necessary attributes to make the necessary calculations.
+
+        Args:
+            current_salary: The annual salary to be used for calculations.
+            tax_code: The tax code used for calculations.
+
+        Returns:
+            None
+        """
         self.salary: int = current_salary
         self.name: str = "NationalInsurance"
 
     def GetName(self) -> str:
+        """
+        Returns the name of the calculator.
+
+        Args:
+            None
+
+        Returns:
+            The name of the calculator in string.
+        """
         return self.name
 
     def GetCalculationParameters(self) -> dict:
+        """
+        Returns the inputs and outputs of this calculator.
+
+        Args:
+            None.
+
+        Returns:
+            A dictionary showing the required inputs from user and the outputs user will be given.
+        """
         inputs: list[str] = ["current_salary"]
         outputs: list[str] = ["total_tax"]
         return {"inputs": inputs, "outputs": outputs}
 
     def GetAdditionalParameters(self) -> dict:
+        """
+        Returns the information, including thresholds and corresponding rates for all available
+        financial years.
+
+        Args:
+            None.
+
+        Returns:
+            A dictionary that shows the information for all tax years.
+        """
         data: dict[str, dict] = national_insurance_info.information
         return data
 
     def Calculate(self, financial_year: str) -> Union[dict, str]:
+        """
+        Calculates the amount paid for national insurance in the selected financial year.
+
+        Args:
+            financial_year: The year user would like the amount of national insurance to be calculated.
+
+        Returns:
+            A dictionary of breakdown of the amount paid for each tax bracket and the total amount
+            of national insurance paid.
+        """
         try:
             financial_year_data: dict = self.GetAdditionalParameters()[financial_year]
         except KeyError:

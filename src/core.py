@@ -1,11 +1,25 @@
 from typing import Union
 import sys
 import os
-from src import income_tax, national_insurance
 sys.path.append(os.getcwd())
+from src import income_tax, national_insurance
+
 
 class Core:
+    """
+    A class to display available calculators and calculate annual amount paid for a specific tax.
+    """
     def __init__(self, current_salary: int, tax_code: str) -> None:
+        """
+        Constructs all the necessary attributes to make the necessary calculations and eager loads all calculators.
+
+        Args:
+            current_salary: The annual salary to be used for calculations.
+            tax_code: The tax code used for calculations.
+
+        Returns:
+            None
+        """
         self.tools: dict = {}
         income_tax_calc: object = income_tax.IncomeTax(current_salary, tax_code)
         national_insurance_calc: object = national_insurance.NationalInsurance(current_salary)
@@ -13,12 +27,30 @@ class Core:
         self.tools["national_insurance"]: object = national_insurance_calc
 
     def GetTools(self) -> list:
+        """
+        Returns a list of available calculators.
+
+        Args:
+            None
+
+        Returns:
+            The list of available calculators.
+        """
         # try:
         return list(self.tools.keys())
         # except TypeError:
         # return "Please check if the number of arguments provided are correct. \n Arguments for this method: 0"
 
     def GetCalculationParameters(self, tool_name: str) -> Union[dict, str]:
+        """
+        Returns the inputs and outputs of the selected calculator.
+
+        Args:
+            tool_name: The name of the calculator.
+
+        Returns:
+            A dictionary showing the required inputs from user and the outputs user will be given.
+        """
         try:
             curr_tool: object = self.tools[tool_name]
             return curr_tool.GetCalculationParameters()
@@ -28,6 +60,18 @@ class Core:
         #     return "Please check if the number of arguments provided are correct. \n Arguments for this method: 1"
 
     def GetAdditionalParameters(self, tool_name: str, financial_year: str) -> Union[dict, str]:
+        """
+        Returns the information, including thresholds and corresponding rates for the selected 
+        tax year if there is information for the selected financial year.
+
+        Args:
+            tool_name: The name of the calculator.
+            financial_year: The year user would like the amount to be calculated.
+
+        Returns:
+            A dictionary that shows the information for the selected tax year.
+            
+        """
         try:
             data: dict[str, dict] = self.tools[tool_name].GetAdditionalParameters()
             return data[financial_year]
@@ -41,6 +85,17 @@ class Core:
         # return "Please check if the number of arguments provided are correct. \n Arguments for this method: 2"
 
     def Calculate(self, tool_name: str, financial_year: str) -> Union[dict, str]:
+        """
+        Calculates the amount paid for the selected tool in the selected financial year.
+
+        Args:
+            tool_name: The name of the calculator.
+            financial_year: The year user would like the amount to be calculated.
+
+        Returns:
+            A dictionary of breakdown of the amount paid for each tax bracket and 
+            the total amount paid for the selected calculator.
+        """
         try:
             return self.tools[tool_name].Calculate(financial_year)
         except KeyError:
