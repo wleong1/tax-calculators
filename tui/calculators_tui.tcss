@@ -1,0 +1,18 @@
+Screen {
+    background: $panel;
+}
+
+#salary {
+    dock: top;
+    margin: 1 0;
+}
+
+Button {
+    height: auto;
+    width: 25%
+}
+
+#results {
+    width: 100%;
+    height: auto;    
+}

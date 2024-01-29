@@ -9,20 +9,19 @@ class Core:
     """
     A class to display available calculators and calculate annual amount paid for a specific tax.
     """
-    def __init__(self, current_salary: int, tax_code: str) -> None:
+    def __init__(self) -> None:
         """
         Constructs all the necessary attributes to make the necessary calculations and eager loads all calculators.
 
         Args:
-            current_salary: The annual salary to be used for calculations.
-            tax_code: The tax code used for calculations.
+            None
 
         Returns:
             None
         """
         self.tools: dict = {}
-        income_tax_calc: object = income_tax.IncomeTax(current_salary, tax_code)
-        national_insurance_calc: object = national_insurance.NationalInsurance(current_salary)
+        income_tax_calc: object = income_tax.IncomeTax()
+        national_insurance_calc: object = national_insurance.NationalInsurance()
         self.tools["income_tax"]: object = income_tax_calc
         self.tools["national_insurance"]: object = national_insurance_calc
 
@@ -84,7 +83,7 @@ class Core:
         # except TypeError:
         # return "Please check if the number of arguments provided are correct. \n Arguments for this method: 2"
 
-    def Calculate(self, tool_name: str, financial_year: str) -> Union[dict, str]:
+    def Calculate(self, tool_name: str, current_salary: int, financial_year: str) -> Union[dict, str]:
         """
         Calculates the amount paid for the selected tool in the selected financial year.
 
@@ -97,7 +96,7 @@ class Core:
             the total amount paid for the selected calculator.
         """
         try:
-            return self.tools[tool_name].Calculate(financial_year)
+            return self.tools[tool_name].Calculate(current_salary, financial_year)
         except KeyError:
             return "Please provide the correct tool name"
         # except TypeError:
