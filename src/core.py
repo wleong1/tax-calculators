@@ -73,7 +73,10 @@ class Core:
         """
         try:
             data: dict[str, dict] = self.tools[tool_name].GetAdditionalParameters()
-            return data[financial_year]
+            if financial_year:
+                return data[financial_year]
+            else:
+                return data
         except KeyError:
             return """
             Incorrect tool name, year not included in calculator or, wrong format provided.
@@ -124,8 +127,8 @@ class Core:
         # except ImportError as e:
         #     print("No such calculator")
 
-# a = Core(20000, "1257L")
+# a = Core()
 # print(a.GetTools())
 # print(a.GetCalculationParameters("national_insurance"))
-# print(a.GetAdditionalParameters("national_insurane", "2023-245"))
+# print(a.GetAdditionalParameters("national_insurance", None))
 # print(a.Calculate("national_insurance", "2022-232"))

@@ -25,7 +25,7 @@ def test_GetCalculationParameters_key_error():
     results = test_core.GetCalculationParameters(tool_name="income_tex")
     assert results == "Please provide the correct tool name"
 
-def test_GetAdditionalParameters_income_tax():
+def test_GetAdditionalParameters_income_tax_year_given():
     test_core = core.Core()
     tool_name = "income_tax"
     financial_year = "2018-19"
@@ -36,6 +36,20 @@ def test_GetAdditionalParameters_income_tax():
         'rates': [0, 0.2, 0.4, 0.45]
         }
     results = test_core.GetAdditionalParameters(tool_name=tool_name, financial_year=financial_year)
+    assert isinstance(results, dict)
+    assert results == dummy_results
+
+def test_GetAdditionalParameters_income_tax_year_is_none():
+    test_core = core.Core()
+    tool_name = "income_tax"
+    financial_year = None
+    dummy_results = {
+        'personal_allowance': 11850,
+        'personal_allowance threshold': 100000,
+        'thresholds': [0, 11850, 46350, 150000],
+        'rates': [0, 0.2, 0.4, 0.45]
+        }
+    results = test_core.GetAdditionalParameters(tool_name=tool_name, financial_year=financial_year)["2018-19"]
     assert isinstance(results, dict)
     assert results == dummy_results
 
@@ -59,7 +73,7 @@ def test_Calculate_income_tax_under_first_threshold():
     current_salary = 12570
     calculated_partial_results = {
         'gross income': '12570.00',
-        'breakdown': {0: 0, 0.2: 0, 0.4: 0, 0.45: 0},
+        'breakdown': {0: "0.00", 0.2: "0.00", 0.4: "0.00", 0.45: "0.00"},
         'total income tax': '0.00'
         }
     results = test_core.Calculate(tool_name=tool_name, current_salary=current_salary, financial_year=financial_year)
@@ -77,7 +91,7 @@ def test_Calculate_income_tax_over_first_threshold():
     current_salary = 29000
     calculated_partial_results = {
         'gross income': '29000.00',
-        'breakdown': {0: 0, 0.2: 3286.0, 0.4: 0, 0.45: 0},
+        'breakdown': {0: "0.00", 0.2: "3286.00", 0.4: "0.00", 0.45: "0.00"},
         'total income tax': '3286.00'
         }
     results = test_core.Calculate(tool_name=tool_name, current_salary=current_salary, financial_year=financial_year)
@@ -95,7 +109,7 @@ def test_Calculate_income_tax_over_second_threshold():
     current_salary = 60000
     calculated_partial_results = {
         'gross income': '60000.00',
-        'breakdown': {0: 0, 0.2: 7540.0, 0.4: 3892.0, 0.45: 0},
+        'breakdown': {0: "0.00", 0.2: "7540.00", 0.4: "3892.00", 0.45: "0.00"},
         'total income tax': '11432.00'
         }
     results = test_core.Calculate(tool_name=tool_name, current_salary=current_salary, financial_year=financial_year)
@@ -113,7 +127,7 @@ def test_Calculate_income_tax_over_third_threshold():
     current_salary = 102000
     calculated_partial_results = {
         'gross income': '102000.00',
-        'breakdown': {0: 0, 0.2: 7540.0, 0.4: 21092.0, 0.45: 0},
+        'breakdown': {0: "0.00", 0.2: "7540.00", 0.4: "21092.00", 0.45: "0.00"},
         'total income tax': '28632.00'
         }
     results = test_core.Calculate(tool_name=tool_name, current_salary=current_salary, financial_year=financial_year)
@@ -131,7 +145,7 @@ def test_Calculate_income_tax_zero_personal_allowance():
     current_salary = 200000
     calculated_partial_results = {
         'gross income': '200000.00',
-        'breakdown': {0.2: 7540.0, 0.4: 44920.0, 0.45: 22500.0},
+        'breakdown': {0.2: "7540.00", 0.4: "44920.00", 0.45: "22500.00"},
         'total income tax': '74960.00'
         }
     results = test_core.Calculate(tool_name=tool_name, current_salary=current_salary, financial_year=financial_year)

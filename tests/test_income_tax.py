@@ -29,7 +29,7 @@ def test_Calculate_under_first_threshold():
     current_salary = 12570
     calculated_partial_results = {
         'gross income': '12570.00',
-        'breakdown': {0: 0, 0.2: 0, 0.4: 0, 0.45: 0},
+        'breakdown': {0: '0.00', 0.2: '0.00', 0.4: '0.00', 0.45: '0.00'},
         'total income tax': '0.00'
         }
     results = test_income_tax.Calculate(current_salary=current_salary, financial_year=financial_year)
@@ -46,7 +46,7 @@ def test_Calculate_over_first_threshold():
     current_salary = 29000
     calculated_partial_results = {
         'gross income': '29000.00',
-        'breakdown': {0: 0, 0.2: 3286.0, 0.4: 0, 0.45: 0},
+        'breakdown': {0: "0.00", 0.2: "3286.00", 0.4: "0.00", 0.45: "0.00"},
         'total income tax': '3286.00'
         }
     results = test_income_tax.Calculate(current_salary=current_salary, financial_year=financial_year)
@@ -63,7 +63,7 @@ def test_Calculate_over_second_threshold():
     current_salary = 60000
     calculated_partial_results = {
         'gross income': '60000.00',
-        'breakdown': {0: 0, 0.2: 7540.0, 0.4: 3892.0, 0.45: 0},
+        'breakdown': {0: "0.00", 0.2: "7540.00", 0.4: "3892.00", 0.45: "0.00"},
         'total income tax': '11432.00'
         }
     results = test_income_tax.Calculate(current_salary=current_salary, financial_year=financial_year)
@@ -80,7 +80,7 @@ def test_Calculate_over_third_threshold():
     current_salary = 102000
     calculated_partial_results = {
         'gross income': '102000.00',
-        'breakdown': {0: 0, 0.2: 7540.0, 0.4: 21092.0, 0.45: 0},
+        'breakdown': {0: "0.00", 0.2: "7540.00", 0.4: "21092.00", 0.45: "0.00"},
         'total income tax': '28632.00'
         }
     results = test_income_tax.Calculate(current_salary = current_salary, financial_year=financial_year)
@@ -97,7 +97,7 @@ def test_Calculate_zero_personal_allowance():
     current_salary = 200000
     calculated_partial_results = {
         'gross income': '200000.00',
-        'breakdown': {0.2: 7540.0, 0.4: 44920.0, 0.45: 22500.0},
+        'breakdown': {0.2: "7540.00", 0.4: "44920.00", 0.45: "22500.00"},
         'total income tax': '74960.00'
         }
     results = test_income_tax.Calculate(current_salary=current_salary, financial_year=financial_year)

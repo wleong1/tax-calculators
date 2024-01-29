@@ -86,6 +86,8 @@ Please call GetAdditionalParameters() to find available timeframes and format"
             thresholds: list[int] = financial_year_data["thresholds"][:]
             rates: list[float] = financial_year_data["rates"][:]
             # TODO: Include tax codes, for now assumed to be the standard allowance for each year
+
+            # Deduction of personal allowance
             if (current_salary > financial_year_data["personal_allowance threshold"] and
             current_salary < financial_year_data["personal_allowance threshold"] + thresholds[1] * 2):
                 deduction_from_allowance = (current_salary - financial_year_data["personal_allowance threshold"]) // 2
@@ -95,6 +97,8 @@ Please call GetAdditionalParameters() to find available timeframes and format"
                 for idx in range(1, len(thresholds)-1):
                     thresholds[idx] -= financial_year_data["personal_allowance"]
                 thresholds, rates = thresholds[1:], rates[1:]
+
+            # Calculation
             breakdown: dict[float, float] = {rate: 0. for rate in rates}
             total_tax: float = 0.
             idx: int = 1
@@ -116,7 +120,7 @@ Please call GetAdditionalParameters() to find available timeframes and format"
                 breakdown[rates[idx - 1]] = round(curr_tax, 2)
             return {"Annual breakdown":{
                 "gross income": format(current_salary, ".2f"),
-                "breakdown": breakdown,
+                "breakdown": {key: format(value, ".2f") for key, value in breakdown.items()},
                 "total income tax": format(total_tax, ".2f")
                 },
                     "Monthly breakdown":{
@@ -135,5 +139,7 @@ Please call GetAdditionalParameters() to find available timeframes and format"
                 "total income tax": format(total_tax/260, ".2f")}}
         except TypeError:
             return "Please provide a valid salary, in integers"
-# a = IncomeTax()
-# print(a.Calculate(200000.00, "2018-19"))
+a = IncomeTax()
+print(a.Calculate(12570.00, "2022-23"))
+# results = a.GetAdditionalParameters()
+# print(results)
