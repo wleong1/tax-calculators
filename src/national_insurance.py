@@ -85,8 +85,8 @@ to find available timeframes and format"
             if current_salary < 0:
                 return "Please provide a positive salary"
             total_tax: float = 0.
-            curr_tax: float = 0.
             if "thresholds_annual" in financial_year_data:
+                curr_tax: float
                 thresholds: list[int] = financial_year_data["thresholds_annual"]
                 rates: list[float] = financial_year_data["rates"]
                 breakdown: dict[float, float] = {rate: 0. for rate in rates}
@@ -96,20 +96,21 @@ to find available timeframes and format"
                     if current_salary - thresholds[idx] >= 0:
                         curr_tax = (thresholds[idx] - thresholds[idx - 1]) * rates[idx - 1]
                         total_tax += curr_tax
-                        breakdown[rates[idx - 1]] = curr_tax
+                        breakdown[rates[idx - 1]] = round(curr_tax, 2)
                         idx += 1
                     else:
                         curr_tax = (current_salary - thresholds[idx - 1]) * rates[idx - 1]
                         total_tax += curr_tax
-                        breakdown[rates[idx - 1]] = curr_tax
+                        breakdown[rates[idx - 1]] = round(curr_tax, 2)
                         break
                 if idx >= length:
                     curr_tax = (current_salary - thresholds[-1]) * rates[-1]
                     total_tax += curr_tax
-                    breakdown[rates[idx - 1]] = curr_tax
+                    breakdown[rates[idx - 1]] = round(curr_tax, 2)
             else:
                 durations: list[str] = list(financial_year_data.keys())
                 for duration in durations:
+                    curr_tax: float = 0.
                     thresholds: list[int] = financial_year_data[duration]["thresholds_month"]
                     rates: list[float] = financial_year_data[duration]["rates"]
                     breakdown: dict[float, float] = {rate: 0. for rate in rates}
@@ -154,5 +155,5 @@ to find available timeframes and format"
         except TypeError:
             return "Please provide a valid salary, in integers"
 # a = NationalInsurance()
-# print(a.Calculate(200000,"2018-19"))
+# print(a.Calculate(200000,"2022-23"))
 # print(a.GetAdditionalParameters())

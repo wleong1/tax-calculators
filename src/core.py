@@ -66,7 +66,8 @@ class Core:
 
         Args:
             tool_name: The name of the calculator.
-            financial_year: The year user would like the amount to be calculated.
+            financial_year: The year user would like to see the additional information in,
+                        leaving it blank will display all years' information.
 
         Returns:
             A dictionary that shows the information for the selected tax year or all tax years
@@ -93,6 +94,7 @@ class Core:
 
         Args:
             tool_name: The name of the calculator.
+            current_salary: The salary in which the tax will be calculated on.
             financial_year: The year user would like the amount to be calculated.
 
         Returns:

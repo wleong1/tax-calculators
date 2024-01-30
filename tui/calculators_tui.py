@@ -193,9 +193,9 @@ class Calculators(App):
         rows.append(first_row)
         time_period: list = list(results.keys())
         for _, period in enumerate(time_period):
-            curr_time_period = period
-            curr_values = list(results[curr_time_period]['breakdown'].values())
-            curr_row_data = [f"{curr_time_period}"]
+            curr_time_period: str = period
+            curr_values: list = list(results[curr_time_period]['breakdown'].values())
+            curr_row_data: list = [f"{curr_time_period}"]
             for value in curr_values:
                 curr_row_data.append(value)
             curr_row_data.append(results[curr_time_period]["total"])
