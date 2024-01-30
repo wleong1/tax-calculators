@@ -11,9 +11,6 @@ from textual.widgets._tabs import Tab
 print(sys.path)
 sys.path.append(os.getcwd())
 from src import core
-from tui import income_tax_gui
-from income_tax_gui import Stopwatch
-import glob
 
 
 class Calculators(App):
@@ -32,65 +29,35 @@ class Calculators(App):
         yield Header()
         yield Footer()
         with TabbedContent():
-            # self.core_tab = core.Core()
-            # calcs = list(self.core_tab.GetTools())
-            # total_calcs = len(calcs)
-            # for idx in range(total_calcs):
-            #     curr_calc = calcs[idx]
-            #     with TabPane(self.core_tab.tools[curr_calc].name, id=curr_calc):  # First tab
-            #         yield Input(placeholder="Input your salary")
-            #         # yield Input(placeholder="Enter your tax code")
-            #         yield Button("Calculate", id=curr_calc)
-            #         with VerticalScroll(id="results-container"):
-            #             yield Markdown(id="results")
-            # self.core_tab = core.Core()
-            # calc = list(self.core_tab.GetTools())[0]
-            year_options = [year for year in self.core_tab.GetAdditionalParameters("income_tax", None).keys()]
-            year_options.insert(0, "All")
-            with TabPane(self.core_tab.tools["income_tax"].name, id="income_tax"):  # First tab
-                yield Input(placeholder="Input your salary", id="salary")
-                # yield Input(placeholder="Enter your tax code", id="tax-code")
-                yield Select.from_values(year_options, allow_blank=False, id="year")
-                yield Horizontal(
-                    Button("GetName", id="name"),
-                    Button("GetCalculationParameters", id="calcparams"),
-                    Button("GetAdditionalParameters", id="addparams"),
-                    Button("Calculate", id="calc")
-                    )
-                # yield Markdown(id="results")
-                yield DataTable(id="results")
-            with TabPane(self.core_tab.tools["national_insurance"].name, id="national_insurance"):  # First tab
-                yield Input(placeholder="Input your salary", id="salary")
-                # yield Input(placeholder="Enter your tax code", id="tax-code")
-                yield Select.from_values(year_options, allow_blank=False, id="year")
-                yield Horizontal(
-                    Button("GetName", id="name"),
-                    Button("GetCalculationParameters", id="calcparams"),
-                    Button("GetAdditionalParameters", id="addparams"),
-                    Button("Calculate", id="calc")
-                    )
-                # yield Markdown(id="results")
-                yield DataTable(id="results")
+            calcs = list(self.core_tab.GetTools())
+            for calc in calcs:
+                with TabPane(self.core_tab.tools[calc].name, id=calc):  # First tab
+                    year_options = [year for year in self.core_tab.GetAdditionalParameters(calc, None).keys()]
+                    year_options.insert(0, "All")
+                    yield Input(placeholder="Input your salary", id=calc+"_salary")
+                    # yield Input(placeholder="Enter your tax code", id="tax-code")
+                    yield Select.from_values(year_options, allow_blank=False, id=calc+"_year")
+                    yield Horizontal(
+                        Button("GetName", id="name"),
+                        Button("GetCalculationParameters", id="calcparams"),
+                        Button("GetAdditionalParameters", id="addparams"),
+                        Button("Calculate", id="calc")
+                        )
+                    yield DataTable(id=calc+"_results")
 
     @on(Button.Pressed, "#calc") #the "#calc" is to specify that the button is specifically for that id
     def pressed_calc(self) -> None:
-        salary_input = self.query_one("#salary", Input)
-        results_markdown = self.query_one("#results", DataTable)
-        self.query_one("#results", DataTable).clear(columns=True)
-        # results_markdown = self.query_one("#results", Markdown)
+        tab_name = self.query_one(TabbedContent).active
+        salary_input = self.query_one(f"#{tab_name}_salary", Input)
+        results_markdown = self.query_one(f"#{tab_name}_results", DataTable)
+        self.query_one(f"#{tab_name}_results", DataTable).clear(columns=True)
         salary_value = salary_input.value.strip()
-        chosen_year = self.query_one("#year", Select)
+        chosen_year = self.query_one(f"#{tab_name}_year", Select)
         chosen_year_value = chosen_year.value
-        # self.core_tab = core.Core()
         if chosen_year_value != "All":
             try:
-                calculated_results = self.core_tab.Calculate(tool_name="income_tax", current_salary=int(salary_value), financial_year=chosen_year_value)
-                # results_markdown.update(str(calculated_results))
-                # rates = [rate for rate in calculated_results['Annual breakdown']['breakdown'].keys()]
-                # first_row = ["Breakdown\Rates"]
-                # for rate in rates:
-                #     first_row.append(f"{rate*100}%")
-                self.format_results(results=calculated_results)
+                calculated_results = self.core_tab.Calculate(tool_name=tab_name, current_salary=int(salary_value), financial_year=chosen_year_value)
+                self.format_results(results=calculated_results, tool_name=tab_name)
             except ValueError:
                 results_markdown.add_columns("Please enter a valid salary value.")
         else:
@@ -98,19 +65,19 @@ class Calculators(App):
 
     @on(Button.Pressed, '#addparams')
     def pressed_add_info(self) -> None:
-        # self.core_tab = core.Core()
-        chosen_year = self.query_one("#year", Select)
+        tab_name = self.query_one(TabbedContent).active
+        chosen_year = self.query_one(f"#{tab_name}_year", Select)
         chosen_year_value = chosen_year.value
-        results_datatable = self.query_one("#results", DataTable)
-        self.query_one("#results", DataTable).clear(columns=True)
+        results_datatable = self.query_one(f"#{tab_name}_results", DataTable)
+        self.query_one(f"#{tab_name}_results", DataTable).clear(columns=True)
         rows = []
         if chosen_year_value == "All":
             rows.append(["Year", "Info"])
-            for year, info in self.core_tab.GetAdditionalParameters(tool_name="income_tax", financial_year=None).items():
+            for year, info in self.core_tab.GetAdditionalParameters(tool_name=tab_name, financial_year=None).items():
                 rows.append([year, str(info)])
         else:
             rows.append(["Info", "Value"])
-            for info, value in self.core_tab.GetAdditionalParameters(tool_name="income_tax", financial_year=chosen_year_value).items():
+            for info, value in self.core_tab.GetAdditionalParameters(tool_name=tab_name, financial_year=chosen_year_value).items():
                 rows.append([info, value])
         results_datatable.add_columns(*rows[0])
         results_datatable.add_rows(rows[1:])
@@ -118,15 +85,15 @@ class Calculators(App):
 
     @on(Button.Pressed, "#name, #calcparams")
     def pressed_basic_info(self, event: Button.Pressed) -> None:
-        results_markdown = self.query_one("#results", DataTable)
-        self.query_one('#results', DataTable).clear(columns=True)
-        # self.core_tab = core.Core()
+        tab_name = self.query_one(TabbedContent).active
+        results_markdown = self.query_one(f"#{tab_name}_results", DataTable)
+        self.query_one(f"#{tab_name}_results", DataTable).clear(columns=True)
         button_id = event.button.id
         if button_id == "name":
             results_markdown.add_column("Calculator Name")
-            results_markdown.add_row("Income Tax")
+            results_markdown.add_row(self.core_tab.tools[tab_name].GetName())
         elif button_id == "calcparams":
-            results = self.core_tab.GetCalculationParameters("income_tax")
+            results = self.core_tab.GetCalculationParameters(tool_name=tab_name)
             first_row = [key for key in results.keys()]
             rows = []
             rows.append([key.capitalize() for key in first_row])
@@ -140,13 +107,11 @@ class Calculators(App):
                     else:
                         curr_row.append("")
                 rows.append(curr_row)
-                # [1, 1], [1, -], [1, -]
-            # results_markdown.update(str(self.core_tab.GetCalculationParameters("income_tax")))
             results_markdown.add_columns(*rows[0])
             results_markdown.add_rows(rows[1:])
 
-    def format_results(self, results) -> None:
-        results_datatable = self.query_one("#results", DataTable)
+    def format_results(self, results, tool_name) -> None:
+        results_datatable = self.query_one(f"#{tool_name}_results", DataTable)
         rows = []
         first_row = []
         rates = [rate for rate in results['Annual breakdown']['breakdown'].keys()]
@@ -159,11 +124,10 @@ class Calculators(App):
         for idx in range(len(time_period)):
             curr_time_period = time_period[idx]
             curr_values = [value for value in results[curr_time_period]['breakdown'].values()]
-            # curr_row_data = [f"{curr_time_period}", f"{curr_values[0]}", f"{curr_values[1]}", f"{curr_values[2]}", f"{curr_values[3]}"]
             curr_row_data = [f"{curr_time_period}"]
             for value in curr_values:
                 curr_row_data.append(value)
-            curr_row_data.append(results[curr_time_period]["total income tax"])
+            curr_row_data.append(results[curr_time_period]["total"])
             rows.append(curr_row_data)
         results_datatable.add_columns(*rows[0])
         results_datatable.add_rows(rows[1:])

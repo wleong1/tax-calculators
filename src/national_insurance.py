@@ -20,7 +20,7 @@ class NationalInsurance:
         Returns:
             None
         """
-        self.name: str = "NationalInsurance"
+        self.name: str = "National_Insurance"
 
     def GetName(self) -> str:
         """
@@ -135,22 +135,22 @@ to find available timeframes and format"
             return {"Annual breakdown":{
                 "gross income": format(current_salary, ".2f"),
                 "breakdown": breakdown,
-                "total NI": format(total_tax, ".2f")
+                "total": format(total_tax, ".2f")
                 },
                     "Monthly breakdown":{
                 "gross income": format(current_salary/12, ".2f"),
                 "breakdown": {key: format(value/12, ".2f") for key, value in breakdown.items()},
-                "total NI": format(total_tax/12, ".2f")
+                "total": format(total_tax/12, ".2f")
                 },
                     "Weekly breakdown":{
                 "gross income": format(current_salary/52, ".2f"),
                 "breakdown": {key: format(value/52, ".2f") for key, value in breakdown.items()},
-                "total NI": format(total_tax/52, ".2f")
+                "total": format(total_tax/52, ".2f")
                 },
                     "Daily breakdown":{
                 "gross income": format(current_salary/260, ".2f"),
                 "breakdown": {key: format(value/260, ".2f") for key, value in breakdown.items()},
-                "total NI": format(total_tax/260, ".2f")}}
+                "total": format(total_tax/260, ".2f")}}
         except TypeError:
             return "Please provide a valid salary, in integers"
 # a = NationalInsurance()
