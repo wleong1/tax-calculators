@@ -88,14 +88,16 @@ Please call GetAdditionalParameters() to find available timeframes and format"
             # TODO: Include tax codes, for now assumed to be the standard allowance for each year
 
             # Deduction of personal allowance
-            if (current_salary > financial_year_data["personal_allowance threshold"] and
-            current_salary < financial_year_data["personal_allowance threshold"] + thresholds[1] * 2):
-                deduction_from_allowance = (current_salary - financial_year_data["personal_allowance threshold"]) // 2
-                for idx in range(1, len(thresholds)-1):
-                    thresholds[idx] -= deduction_from_allowance
-            elif current_salary >= financial_year_data["personal_allowance threshold"] + thresholds[1] * 2:
-                for idx in range(1, len(thresholds)-1):
-                    thresholds[idx] -= financial_year_data["personal_allowance"]
+            personal_allowance_threshold = financial_year_data["personal_allowance threshold"]
+            if (personal_allowance_threshold + thresholds[1]*2 > current_salary >
+                personal_allowance_threshold):
+                deduction_from_allowance = (current_salary -
+                                            personal_allowance_threshold)//2
+                for index in range(1, len(thresholds)-1):
+                    thresholds[index] -= deduction_from_allowance
+            elif current_salary >= personal_allowance_threshold + thresholds[1]*2:
+                for index in range(1, len(thresholds)-1):
+                    thresholds[index] -= financial_year_data["personal_allowance"]
                 thresholds, rates = thresholds[1:], rates[1:]
 
             # Calculation

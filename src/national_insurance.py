@@ -67,7 +67,8 @@ class NationalInsurance:
         Calculates the amount paid for national insurance in the selected financial year.
 
         Args:
-            financial_year: The year user would like the amount of national insurance to be calculated.
+            financial_year: The year user would like the amount of national insurance to be
+            calculated.
 
         Returns:
             A dictionary of breakdown of the amount paid for each tax bracket and the total amount
@@ -84,8 +85,8 @@ to find available timeframes and format"
             if current_salary < 0:
                 return "Please provide a positive salary"
             total_tax: float = 0.
+            curr_tax: float = 0.
             if "thresholds_annual" in financial_year_data:
-                curr_tax: float
                 thresholds: list[int] = financial_year_data["thresholds_annual"]
                 rates: list[float] = financial_year_data["rates"]
                 breakdown: dict[float, float] = {rate: 0. for rate in rates}
@@ -109,7 +110,6 @@ to find available timeframes and format"
             else:
                 durations: list[str] = list(financial_year_data.keys())
                 for duration in durations:
-                    curr_tax: float = 0.
                     thresholds: list[int] = financial_year_data[duration]["thresholds_month"]
                     rates: list[float] = financial_year_data[duration]["rates"]
                     breakdown: dict[float, float] = {rate: 0. for rate in rates}

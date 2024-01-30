@@ -4,7 +4,7 @@ from src import national_insurance
 def test_GetName():
     test_national_insurance = national_insurance.NationalInsurance()
     results = test_national_insurance.GetName()
-    assert results == "NationalInsurance"
+    assert results == "National_Insurance"
 
 def test_GetCalculationParameters():
     test_national_insurance = national_insurance.NationalInsurance()

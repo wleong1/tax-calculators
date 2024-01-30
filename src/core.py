@@ -1,4 +1,4 @@
-from typing import Union
+from typing import Union, Any
 import sys
 import os
 sys.path.append(os.getcwd())
@@ -11,7 +11,8 @@ class Core:
     """
     def __init__(self) -> None:
         """
-        Constructs all the necessary attributes to make the necessary calculations and eager loads all calculators.
+        Constructs all the necessary attributes to make the necessary calculations and eager
+        loads all calculators.
 
         Args:
             None
@@ -22,8 +23,8 @@ class Core:
         self.tools: dict = {}
         income_tax_calc: object = income_tax.IncomeTax()
         national_insurance_calc: object = national_insurance.NationalInsurance()
-        self.tools["income_tax"]: object = income_tax_calc
-        self.tools["national_insurance"]: object = national_insurance_calc
+        self.tools["income_tax"] = income_tax_calc
+        self.tools["national_insurance"] = national_insurance_calc
 
     def GetTools(self) -> list:
         """
@@ -38,7 +39,7 @@ class Core:
         # try:
         return list(self.tools.keys())
         # except TypeError:
-        # return "Please check if the number of arguments provided are correct. \n Arguments for this method: 0"
+        # return "Please check if the number of arguments provided are correct. \n Arguments for this method: 0" # pylint: disable=C0301
 
     def GetCalculationParameters(self, tool_name: str) -> Union[dict, str]:
         """
@@ -51,14 +52,14 @@ class Core:
             A dictionary showing the required inputs from user and the outputs user will be given.
         """
         try:
-            curr_tool: object = self.tools[tool_name]
+            curr_tool: Union[income_tax.IncomeTax, national_insurance.NationalInsurance] = self.tools[tool_name]
             return curr_tool.GetCalculationParameters()
         except KeyError:
             return "Please provide the correct tool name"
         # except TypeError:
-        #     return "Please check if the number of arguments provided are correct. \n Arguments for this method: 1"
+        #     return "Please check if the number of arguments provided are correct. \n Arguments for this method: 1" # pylint: disable=C0301
 
-    def GetAdditionalParameters(self, tool_name: str, financial_year: str) -> Union[dict, str]:
+    def GetAdditionalParameters(self, tool_name: str, financial_year: Union[str, None]) -> Union[dict, str]:
         """
         Returns the information, including thresholds and corresponding rates for the selected 
         tax year if there is information for the selected financial year.
@@ -68,15 +69,15 @@ class Core:
             financial_year: The year user would like the amount to be calculated.
 
         Returns:
-            A dictionary that shows the information for the selected tax year.
+            A dictionary that shows the information for the selected tax year or all tax years
+            if None selected.
             
         """
         try:
             data: dict[str, dict] = self.tools[tool_name].GetAdditionalParameters()
             if financial_year:
                 return data[financial_year]
-            else:
-                return data
+            return data
         except KeyError:
             return """
             Incorrect tool name, year not included in calculator or, wrong format provided.
@@ -84,9 +85,9 @@ class Core:
             Correct format for financial_year: "2022-23"   
             """
         # except TypeError:
-        # return "Please check if the number of arguments provided are correct. \n Arguments for this method: 2"
+        # return "Please check if the number of arguments provided are correct. \n Arguments for this method: 2" # pylint: disable=C0301
 
-    def Calculate(self, tool_name: str, current_salary: int, financial_year: str) -> Union[dict, str]:
+    def Calculate(self, tool_name: str, current_salary: int, financial_year: Any) -> Union[dict, str]:
         """
         Calculates the amount paid for the selected tool in the selected financial year.
 
@@ -103,7 +104,7 @@ class Core:
         except KeyError:
             return "Please provide the correct tool name"
         # except TypeError:
-        # return "Please check if the number of arguments provided are correct. \n Arguments for this method: 2"
+        # return "Please check if the number of arguments provided are correct. \n Arguments for this method: 2" # pylint: disable=C0301
 
     # def EagerLoad(self) -> None:
     #     pass

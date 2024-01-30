@@ -3,7 +3,7 @@ from src import income_tax
 def test_GetName():
     test_income_tax = income_tax.IncomeTax()
     results = test_income_tax.GetName()
-    assert results == "IncomeTax"
+    assert results == "Income_Tax"
 
 def test_GetCalculationParameters():
     test_income_tax = income_tax.IncomeTax()
