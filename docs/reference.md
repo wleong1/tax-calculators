@@ -6,3 +6,5 @@ reference for the technical implementation of the
 ::: src.core
 ::: src.national_insurance
 ::: src.income_tax
+::: tui.calculators_tui
+::: cli.calculators_cli

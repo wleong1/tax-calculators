@@ -1,6 +1,7 @@
 from typing import Union
 import os
 import sys
+
 sys.path.append(os.getcwd())
 from src import national_insurance_info
 
@@ -62,7 +63,7 @@ class NationalInsurance:
         data: dict[str, dict] = national_insurance_info.information
         return data
 
-    def Calculate(self, current_salary:int, financial_year: str) -> Union[dict, str]:
+    def Calculate(self, current_salary: int, financial_year: str) -> Union[dict, str]:
         """
         Calculates the amount paid for national insurance in the selected financial year.
 
@@ -84,22 +85,26 @@ to find available timeframes and format"
         try:
             if current_salary < 0:
                 return "Please provide a positive salary"
-            total_tax: float = 0.
+            total_tax: float = 0.0
             if "thresholds_annual" in financial_year_data:
                 curr_tax: float
                 thresholds: list[int] = financial_year_data["thresholds_annual"]
                 rates: list[float] = financial_year_data["rates"]
-                breakdown: dict[float, float] = {rate: 0. for rate in rates}
+                breakdown: dict[float, float] = {rate: 0.0 for rate in rates}
                 idx: int = 1
                 length: int = len(thresholds)
                 while idx < length:
                     if current_salary - thresholds[idx] >= 0:
-                        curr_tax = (thresholds[idx] - thresholds[idx - 1]) * rates[idx - 1]
+                        curr_tax = (thresholds[idx] - thresholds[idx - 1]) * rates[
+                            idx - 1
+                        ]
                         total_tax += curr_tax
                         breakdown[rates[idx - 1]] = round(curr_tax, 2)
                         idx += 1
                     else:
-                        curr_tax = (current_salary - thresholds[idx - 1]) * rates[idx - 1]
+                        curr_tax = (current_salary - thresholds[idx - 1]) * rates[
+                            idx - 1
+                        ]
                         total_tax += curr_tax
                         breakdown[rates[idx - 1]] = round(curr_tax, 2)
                         break
@@ -110,16 +115,20 @@ to find available timeframes and format"
             else:
                 durations: list[str] = list(financial_year_data.keys())
                 for duration in durations:
-                    curr_tax: float = 0.
-                    thresholds: list[int] = financial_year_data[duration]["thresholds_month"]
+                    curr_tax: float = 0.0
+                    thresholds: list[int] = financial_year_data[duration][
+                        "thresholds_month"
+                    ]
                     rates: list[float] = financial_year_data[duration]["rates"]
-                    breakdown: dict[float, float] = {rate: 0. for rate in rates}
+                    breakdown: dict[float, float] = {rate: 0.0 for rate in rates}
                     idx: int = 1
                     length: int = len(thresholds)
                     salary: float = current_salary / 12
                     while idx < length:
                         if salary - thresholds[idx] >= 0:
-                            curr_tax += (thresholds[idx] - thresholds[idx - 1]) * rates[idx - 1]
+                            curr_tax += (thresholds[idx] - thresholds[idx - 1]) * rates[
+                                idx - 1
+                            ]
                             # total_tax += curr_tax
                             breakdown[rates[idx - 1]] = round(curr_tax, 2)
                             idx += 1
@@ -133,27 +142,41 @@ to find available timeframes and format"
                         # total_tax += curr_tax
                         breakdown[rates[idx - 1]] = round(curr_tax, 2)
                     total_tax += int(duration) * curr_tax
-            return {"Annual breakdown":{
-                "gross income": format(current_salary, ".2f"),
-                "breakdown": breakdown,
-                "total": format(total_tax, ".2f")
+            return {
+                "Annual breakdown": {
+                    "gross income": format(current_salary, ".2f"),
+                    "breakdown": breakdown,
+                    "total": format(total_tax, ".2f"),
                 },
-                    "Monthly breakdown":{
-                "gross income": format(current_salary/12, ".2f"),
-                "breakdown": {key: format(value/12, ".2f") for key, value in breakdown.items()},
-                "total": format(total_tax/12, ".2f")
+                "Monthly breakdown": {
+                    "gross income": format(current_salary / 12, ".2f"),
+                    "breakdown": {
+                        key: format(value / 12, ".2f")
+                        for key, value in breakdown.items()
+                    },
+                    "total": format(total_tax / 12, ".2f"),
                 },
-                    "Weekly breakdown":{
-                "gross income": format(current_salary/52, ".2f"),
-                "breakdown": {key: format(value/52, ".2f") for key, value in breakdown.items()},
-                "total": format(total_tax/52, ".2f")
+                "Weekly breakdown": {
+                    "gross income": format(current_salary / 52, ".2f"),
+                    "breakdown": {
+                        key: format(value / 52, ".2f")
+                        for key, value in breakdown.items()
+                    },
+                    "total": format(total_tax / 52, ".2f"),
                 },
-                    "Daily breakdown":{
-                "gross income": format(current_salary/260, ".2f"),
-                "breakdown": {key: format(value/260, ".2f") for key, value in breakdown.items()},
-                "total": format(total_tax/260, ".2f")}}
+                "Daily breakdown": {
+                    "gross income": format(current_salary / 260, ".2f"),
+                    "breakdown": {
+                        key: format(value / 260, ".2f")
+                        for key, value in breakdown.items()
+                    },
+                    "total": format(total_tax / 260, ".2f"),
+                },
+            }
         except TypeError:
             return "Please provide a valid salary, in integers"
+
+
 # a = NationalInsurance()
 # print(a.Calculate(200000,"2022-23"))
 # print(a.GetAdditionalParameters())

@@ -22,6 +22,8 @@ your use case by looking at the different pages.
 ## Project Overview
 
 ::: src
+::: cli
+::: tui
 
 ## Acknowledgements
 I want to thank my house plants for providing me with
