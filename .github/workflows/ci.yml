@@ -1,4 +1,4 @@
-name: ci 
+name: ci
 on:
   push:
     branches:
@@ -26,3 +26,60 @@ jobs:
             mkdocs-material-
       - run: pip install mkdocs "mkdocstrings[python]" mkdocs-material
       - run: mkdocs gh-deploy --force
+
+name: Mypy
+on: [push]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    name: Mypy
+    steps:
+      - uses: actions/checkout@v1
+      - name: Set up Python 3.x
+        uses: actions/setup-python@v1
+        with:
+          python-version: 3.x
+      - name: Install Dependencies
+        run: |
+          pip install mypy
+      - name: mypy
+        run: |
+          mypy src/
+
+name: pylint
+on: [push]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    name: pylint
+    steps:
+      - uses: actions/checkout@v1
+      - name: Set up Python 3.x
+        uses: actions/setup-python@v1
+        with:
+          python-version: 3.x
+      - name: Install Dependencies
+        run: |
+          pip install pylint
+      - name: pylint
+        run: |
+          pylint src/
+
+name: pytest
+on: [push]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    name: pytest
+    steps:
+      - uses: actions/checkout@v1
+      - name: Set up Python 3.x
+        uses: actions/setup-python@v1
+        with:
+          python-version: 3.x
+      - name: Install Dependencies
+        run: |
+          pip install pytest
+      - name: pytest
+        run: |
+          pytest tests/
