@@ -2,11 +2,12 @@ name: ci
 on:
   push:
     branches:
-      - main
+      - '*'
 permissions:
   contents: write
 jobs:
   deploy:
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -27,10 +28,7 @@ jobs:
       - run: pip install mkdocs "mkdocstrings[python]" mkdocs-material
       - run: mkdocs gh-deploy --force
 
-name: Mypy
-on: [push]
-jobs:
-  build:
+  mypy:
     runs-on: ubuntu-latest
     name: Mypy
     steps:
@@ -46,10 +44,7 @@ jobs:
         run: |
           mypy src/
 
-name: pylint
-on: [push]
-jobs:
-  build:
+  pylint:
     runs-on: ubuntu-latest
     name: pylint
     steps:
@@ -65,10 +60,7 @@ jobs:
         run: |
           pylint src/
 
-name: pytest
-on: [push]
-jobs:
-  build:
+  pytest:
     runs-on: ubuntu-latest
     name: pytest
     steps:
