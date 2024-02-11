@@ -1,9 +1,10 @@
+"""This module creates the national insurance calculator."""
 from typing import Union
 import os
 import sys
 
 sys.path.append(os.getcwd())
-from src import national_insurance_info
+from src import national_insurance_info  # pylint: disable=C0413
 
 
 class NationalInsurance:
@@ -63,7 +64,7 @@ class NationalInsurance:
         data: dict[str, dict] = national_insurance_info.information
         return data
 
-    def calculate(self, current_salary: int, financial_year: str) -> Union[dict, str]:
+    def calculate(self, current_salary: int, financial_year: str) -> Union[dict, str]:  # pylint: disable=R0912
         """
         Calculates the amount paid for national insurance in the selected financial year.
 
@@ -115,14 +116,14 @@ to find available timeframes and format"
             else:
                 durations: list[str] = list(financial_year_data.keys())
                 for duration in durations:
-                    curr_tax: float = 0.0
-                    thresholds: list[int] = financial_year_data[duration][
+                    curr_tax: float = 0.0  # type: ignore[no-redef]
+                    thresholds: list[int] = financial_year_data[duration][  # type: ignore[no-redef]
                         "thresholds_month"
                     ]
-                    rates: list[float] = financial_year_data[duration]["rates"]
-                    breakdown: dict[float, float] = {rate: 0.0 for rate in rates}
-                    idx: int = 1
-                    length: int = len(thresholds)
+                    rates: list[float] = financial_year_data[duration]["rates"]  # type: ignore[no-redef] # pylint: disable=C0301
+                    breakdown: dict[float, float] = {rate: 0.0 for rate in rates}  # type: ignore[no-redef] # pylint: disable=C0301
+                    idx: int = 1  # type: ignore[no-redef]
+                    length: int = len(thresholds)  # type: ignore[no-redef]
                     salary: float = current_salary / 12
                     while idx < length:
                         if salary - thresholds[idx] >= 0:

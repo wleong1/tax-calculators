@@ -1,3 +1,4 @@
+"""This module provides the necessary information for national insurance calculations."""
 information: dict = {
     "2015-16": {
         "thresholds_annual": [0, 8060, 42380],

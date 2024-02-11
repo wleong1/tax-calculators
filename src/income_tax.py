@@ -1,9 +1,10 @@
+"""This module creates the income tax calculator."""
 from typing import Union
 import sys
 import os
 
 sys.path.append(os.getcwd())
-from src import income_tax_info
+from src import income_tax_info  # pylint: disable=C0413
 
 
 class IncomeTax:
@@ -86,7 +87,6 @@ Please call get_additional_parameters() to find available timeframes and format"
                 return "Please provide a positive salary"
             thresholds: list[int] = financial_year_data["thresholds"][:]
             rates: list[float] = financial_year_data["rates"][:]
-            # TODO: Include tax codes, for now assumed to be the standard allowance for each year
 
             # Deduction of personal allowance
             personal_allowance_threshold = financial_year_data[

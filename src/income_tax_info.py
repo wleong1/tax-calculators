@@ -1,3 +1,4 @@
+"""This module provides the necessary information for income tax calculations."""
 information: dict = {
     "2015-16": {
         "personal_allowance": 10600,

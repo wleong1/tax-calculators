@@ -1,9 +1,10 @@
+"""This module creates the core that interacts with the calculators."""
 from typing import Union, Any
 import sys
 import os
 
 sys.path.append(os.getcwd())
-from src import income_tax, national_insurance
+from src import income_tax, national_insurance  # pylint: disable=C0413
 
 
 class Core:
