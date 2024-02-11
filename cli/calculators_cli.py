@@ -24,7 +24,7 @@ class Calculators:
         """
         self.core_tab = core.Core()
 
-    def GetTools(self) -> list:
+    def get_tools(self) -> list:
         """
         Gets available calculators.
 
@@ -34,9 +34,9 @@ class Calculators:
         Returns:
             A list of available calculators.
         """
-        return self.core_tab.GetTools()
+        return self.core_tab.get_tools()
 
-    def GetCalculationParameters(self, tool_name: str) -> Union[dict, str]:
+    def get_calculation_parameters(self, tool_name: str) -> Union[dict, str]:
         """
         Returns the inputs and outputs of the selected calculator.
 
@@ -46,9 +46,9 @@ class Calculators:
         Returns:
             A dictionary showing the required inputs from user and the outputs user will be given.
         """
-        return self.core_tab.GetCalculationParameters(tool_name=tool_name)
+        return self.core_tab.get_calculation_parameters(tool_name=tool_name)
 
-    def GetAdditionalParameters(self, tool_name: str, financial_year: Union[str, None]) -> Union[dict, str]:
+    def get_additional_parameters(self, tool_name: str, financial_year: Union[str, None]) -> Union[dict, str]:
         """
         Returns the information, including thresholds and corresponding rates for the selected 
         tax year if there is information for the selected financial year.
@@ -62,11 +62,11 @@ class Calculators:
             if None selected.
             
         """
-        return self.core_tab.GetAdditionalParameters(
+        return self.core_tab.get_additional_parameters(
             tool_name=tool_name, financial_year=financial_year
             )
 
-    def Calculate(self, tool_name: str, current_salary: int, financial_year: Any) -> Union[dict, str]:
+    def calculate(self, tool_name: str, current_salary: int, financial_year: Any) -> Union[dict, str]:
         """
         Calculates the amount paid for the selected tool in the selected financial year.
 
@@ -78,7 +78,7 @@ class Calculators:
             A dictionary of breakdown of the amount paid for each tax bracket and 
             the total amount paid for the selected calculator.
         """
-        return self.core_tab.Calculate(
+        return self.core_tab.calculate(
             tool_name=tool_name, current_salary=current_salary, financial_year=financial_year
             )
 
@@ -95,7 +95,7 @@ def start_calculator() -> None:
     """
     calculator_app: Calculators = Calculators()
     while True:
-        available_calculators: list = calculator_app.GetTools()
+        available_calculators: list = calculator_app.get_tools()
         calculator: str = click.prompt(
             "Please choose a calculator (type 'exit' to quit)\n" + str(available_calculators)
             )
@@ -165,7 +165,7 @@ def display_params(calculator_app: Calculators, calculator: str, table: PrettyTa
         None
 
     """
-    basic_info: Union[dict, str] = calculator_app.GetCalculationParameters(tool_name=calculator)
+    basic_info: Union[dict, str] = calculator_app.get_calculation_parameters(tool_name=calculator)
     assert isinstance(basic_info, dict)
     table.clear()
     headers: list = list(basic_info.keys())
@@ -198,7 +198,7 @@ def display_additional_params(calculator_app, calculator, table, selected_year) 
         None
 
     """
-    additional_info: Union[dict, str] = calculator_app.GetAdditionalParameters(
+    additional_info: Union[dict, str] = calculator_app.get_additional_parameters(
         tool_name=calculator, financial_year=selected_year
         )
     if isinstance(additional_info, dict):
@@ -233,11 +233,11 @@ def display_results(calculator_app, calculator, table, salary, financial_year) -
 
     """
     try:
-        results: Union[dict, str] = calculator_app.Calculate(
+        results: Union[dict, str] = calculator_app.calculate(
             tool_name=calculator, current_salary=int(salary), financial_year=financial_year
             )
     except ValueError:
-        results = calculator_app.Calculate(
+        results = calculator_app.calculate(
             tool_name=calculator, current_salary=salary, financial_year=financial_year
             )
     if isinstance(results, str):

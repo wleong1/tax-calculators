@@ -23,7 +23,7 @@ class IncomeTax:
         """
         self.name: str = "Income_Tax"
 
-    def GetName(self) -> str:
+    def get_name(self) -> str:
         """
         Returns the name of the calculator.
 
@@ -35,7 +35,7 @@ class IncomeTax:
         """
         return self.name
 
-    def GetCalculationParameters(self) -> dict:
+    def get_calculation_parameters(self) -> dict:
         """
         Returns the inputs and outputs of this calculator.
 
@@ -49,7 +49,7 @@ class IncomeTax:
         outputs: list[str] = ["total_tax"]
         return {"inputs": inputs, "outputs": outputs}
 
-    def GetAdditionalParameters(self) -> dict:
+    def get_additional_parameters(self) -> dict:
         """
         Returns the information, including thresholds and corresponding rates for all available
         financial years.
@@ -63,7 +63,7 @@ class IncomeTax:
         data: dict[str, dict] = income_tax_info.information
         return data
 
-    def Calculate(self, current_salary: int, financial_year: str) -> Union[dict, str]:
+    def calculate(self, current_salary: int, financial_year: str) -> Union[dict, str]:
         """
         Calculates the amount paid for income tax in the selected financial year.
 
@@ -75,11 +75,11 @@ class IncomeTax:
             of income tax paid.
         """
         try:
-            financial_year_data: dict = self.GetAdditionalParameters()[financial_year]
+            financial_year_data: dict = self.get_additional_parameters()[financial_year]
         except KeyError:
             return "Year not included in calculator, wrong format provided, \
 or incorrect key provided for data. \
-Please call GetAdditionalParameters() to find available timeframes and format"
+Please call get_additional_parameters() to find available timeframes and format"
 
         try:
             if current_salary < 0:
@@ -165,6 +165,6 @@ Please call GetAdditionalParameters() to find available timeframes and format"
 
 
 # a = IncomeTax()
-# print(a.Calculate(12570.00, "2022-23"))
-# results = a.GetAdditionalParameters()
+# print(a.calculate(12570.00, "2022-23"))
+# results = a.get_additional_parameters()
 # print(results)

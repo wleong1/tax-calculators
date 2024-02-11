@@ -23,7 +23,7 @@ class NationalInsurance:
         """
         self.name: str = "National_Insurance"
 
-    def GetName(self) -> str:
+    def get_name(self) -> str:
         """
         Returns the name of the calculator.
 
@@ -35,7 +35,7 @@ class NationalInsurance:
         """
         return self.name
 
-    def GetCalculationParameters(self) -> dict:
+    def get_calculation_parameters(self) -> dict:
         """
         Returns the inputs and outputs of this calculator.
 
@@ -49,7 +49,7 @@ class NationalInsurance:
         outputs: list[str] = ["total_tax"]
         return {"inputs": inputs, "outputs": outputs}
 
-    def GetAdditionalParameters(self) -> dict:
+    def get_additional_parameters(self) -> dict:
         """
         Returns the information, including thresholds and corresponding rates for all available
         financial years.
@@ -63,7 +63,7 @@ class NationalInsurance:
         data: dict[str, dict] = national_insurance_info.information
         return data
 
-    def Calculate(self, current_salary: int, financial_year: str) -> Union[dict, str]:
+    def calculate(self, current_salary: int, financial_year: str) -> Union[dict, str]:
         """
         Calculates the amount paid for national insurance in the selected financial year.
 
@@ -76,10 +76,10 @@ class NationalInsurance:
             of national insurance paid.
         """
         try:
-            financial_year_data: dict = self.GetAdditionalParameters()[financial_year]
+            financial_year_data: dict = self.get_additional_parameters()[financial_year]
         except KeyError:
             return "Year not included in calculator, wrong format provided, or \
-incorrect key provided for data. Please call GetAdditionalParameters() \
+incorrect key provided for data. Please call get_additional_parameters() \
 to find available timeframes and format"
 
         try:
@@ -178,5 +178,5 @@ to find available timeframes and format"
 
 
 # a = NationalInsurance()
-# print(a.Calculate(200000,"2022-23"))
-# print(a.GetAdditionalParameters())
+# print(a.calculate(200000,"2022-23"))
+# print(a.get_additional_parameters())

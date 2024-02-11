@@ -43,10 +43,10 @@ class Calculators(App):
         yield Header()
         yield Footer()
         with TabbedContent():
-            calcs: list = list(self.core_tab.GetTools())
+            calcs: list = list(self.core_tab.get_tools())
             for calc in calcs:
                 with TabPane(self.core_tab.tools[calc].name, id=calc):  # First tab
-                    all_info = self.core_tab.GetAdditionalParameters(
+                    all_info = self.core_tab.get_additional_parameters(
                         calc, financial_year=None
                         )
                     assert isinstance(all_info, dict)
@@ -59,8 +59,8 @@ class Calculators(App):
                         )
                     yield Horizontal(
                         Button("GetName", id="name"),
-                        Button("GetCalculationParameters", id="calcparams"),
-                        Button("GetAdditionalParameters", id="addparams"),
+                        Button("get_calculation_parameters", id="calcparams"),
+                        Button("get_additional_parameters", id="addparams"),
                         Button("Calculate", id="calc")
                         )
                     yield DataTable(id=calc+"_results")
@@ -85,7 +85,7 @@ class Calculators(App):
         chosen_year_value: Any = chosen_year.value
         if chosen_year_value != "All":
             try:
-                calculated_results: Union[dict, str] = self.core_tab.Calculate(
+                calculated_results: Union[dict, str] = self.core_tab.calculate(
                     tool_name=tab_name, current_salary=int(salary_value),
                     financial_year=chosen_year_value
                     )
@@ -115,7 +115,7 @@ class Calculators(App):
         rows: list = []
         if chosen_year_value == "All":
             rows.append(["Year", "Info"])
-            all_info = self.core_tab.GetAdditionalParameters(
+            all_info = self.core_tab.get_additional_parameters(
                 tool_name=tab_name, financial_year=None
                 )
             assert isinstance(all_info, dict)
@@ -123,7 +123,7 @@ class Calculators(App):
                 rows.append([year, str(info)])
         else:
             rows.append(["Info", "Value"])
-            all_info = self.core_tab.GetAdditionalParameters(
+            all_info = self.core_tab.get_additional_parameters(
                 tool_name=tab_name, financial_year=chosen_year_value
                 )
             assert isinstance(all_info, dict)
@@ -152,9 +152,9 @@ class Calculators(App):
         button_id: str = event.button.id
         if button_id == "name":
             results_datatable.add_column("Calculator Name")
-            results_datatable.add_row(self.core_tab.tools[tab_name].GetName())
+            results_datatable.add_row(self.core_tab.tools[tab_name].get_name())
         elif button_id == "calcparams":
-            results: Union[dict, str] = self.core_tab.GetCalculationParameters(tool_name=tab_name)
+            results: Union[dict, str] = self.core_tab.get_calculation_parameters(tool_name=tab_name)
             assert isinstance(results, dict)
             first_row: list = list(results.keys())
             rows: list = []

@@ -28,7 +28,7 @@ class Core:
         self.tools["income_tax"] = income_tax_calc
         self.tools["national_insurance"] = national_insurance_calc
 
-    def GetTools(self) -> list:
+    def get_tools(self) -> list:
         """
         Returns a list of available calculators.
 
@@ -43,7 +43,7 @@ class Core:
         # except TypeError:
         # return "Please check if the number of arguments provided are correct. \n Arguments for this method: 0" # pylint: disable=C0301
 
-    def GetCalculationParameters(self, tool_name: str) -> Union[dict, str]:
+    def get_calculation_parameters(self, tool_name: str) -> Union[dict, str]:
         """
         Returns the inputs and outputs of the selected calculator.
 
@@ -57,13 +57,13 @@ class Core:
             curr_tool: Union[
                 income_tax.IncomeTax, national_insurance.NationalInsurance
             ] = self.tools[tool_name]
-            return curr_tool.GetCalculationParameters()
+            return curr_tool.get_calculation_parameters()
         except KeyError:
             return "Please provide the correct tool name"
         # except TypeError:
         #     return "Please check if the number of arguments provided are correct. \n Arguments for this method: 1" # pylint: disable=C0301
 
-    def GetAdditionalParameters(
+    def get_additional_parameters(
         self, tool_name: str, financial_year: Union[str, None]
     ) -> Union[dict, str]:
         """
@@ -81,20 +81,20 @@ class Core:
 
         """
         try:
-            data: dict[str, dict] = self.tools[tool_name].GetAdditionalParameters()
+            data: dict[str, dict] = self.tools[tool_name].get_additional_parameters()
             if financial_year:
                 return data[financial_year]
             return data
         except KeyError:
             return """
             Incorrect tool name, year not included in calculator or, wrong format provided.
-            Call GetTools() to get available tools.
+            Call get_tools() to get available tools.
             Correct format for financial_year: "2022-23"   
             """
         # except TypeError:
         # return "Please check if the number of arguments provided are correct. \n Arguments for this method: 2" # pylint: disable=C0301
 
-    def Calculate(
+    def calculate(
         self, tool_name: str, current_salary: int, financial_year: Any
     ) -> Union[dict, str]:
         """
@@ -110,7 +110,7 @@ class Core:
             the total amount paid for the selected calculator.
         """
         try:
-            return self.tools[tool_name].Calculate(current_salary, financial_year)
+            return self.tools[tool_name].calculate(current_salary, financial_year)
         except KeyError:
             return "Please provide the correct tool name"
         # except TypeError:
@@ -140,7 +140,7 @@ class Core:
 
 
 # a = Core()
-# print(a.GetTools())
-# print(a.GetCalculationParameters("national_insurance"))
-# print(a.GetAdditionalParameters("national_insurance", None))
-# print(a.Calculate("national_insurance", "2022-232"))
+# print(a.get_tools())
+# print(a.get_calculation_parameters("national_insurance"))
+# print(a.get_additional_parameters("national_insurance", None))
+# print(a.calculate("national_insurance", 200000, "2022-23"))
