@@ -1,4 +1,4 @@
-"""This module creates the income tax calculator."""
+"""This module creates the income tax calculator.""" # pylint: disable=R0801
 from typing import Union
 import sys
 import os
