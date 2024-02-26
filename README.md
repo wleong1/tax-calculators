@@ -1,6 +1,9 @@
 # **tax-calculators**
 
-Tax-calculators is a all-in-one calculator where users can calculate the total tax paid per year.
+Tax-calculators is an all-in-one calculator where users can calculate the total tax paid per year.
+| | |
+| --- | --- |
+| Testing | 100% code coverage |
 
 ## Table of Contents
 
