@@ -43,6 +43,8 @@ jobs:
       - name: mypy
         run: |
           mypy src/
+          mypy cli/calculators_cli.py
+          mypy tui/calculators_tui.py
 
   pylint:
     runs-on: ubuntu-latest
@@ -59,6 +61,8 @@ jobs:
       - name: pylint
         run: |
           pylint src/
+          pylint cli/calculators_cli.py
+          pylint tui/calculators_tui.py
 
   pytest:
     runs-on: ubuntu-latest
